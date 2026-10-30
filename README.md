@@ -12,6 +12,14 @@
 - **Credit protection:** the model is only called when someone clicks an AI button, never on page load. There is an optional access code, a per-visitor rate limit (20 requests per 10 minutes), output caps, and a token count shown on every answer.
 - **Safe by design:** every change is shown as a diff, and you can undo all AI changes with one click. The API key stays on the server.
 
+## How we use NVIDIA Nemotron and Nebius Token Factory
+
+- **NVIDIA Nemotron 3 Nano 30B A3B** powers the ZipRun Doctor agent. It reads the detected errors, console output and failed requests, then writes complete file edits. The app re-runs and the loop repeats up to 3 times.
+- **Nebius Token Factory** is the default inference provider. It serves Nemotron through an OpenAI-compatible API, and its fast, inexpensive responses are what make the multi-pass fix loop practical, since each project can need several model calls.
+- Two model roles: code changes use Nemotron with reasoning, and explanations use shorter, faster answers.
+- The API key stays on the server in a Vercel serverless function (`api/ai.js`).
+- Other Nebius services: none, only Token Factory.
+
 ### Configure the AI (Vercel → Settings → Environment Variables)
 
 | Variable | Use |
